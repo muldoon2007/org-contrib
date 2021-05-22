@@ -684,13 +684,13 @@ Return complete project plan as a string in TaskJuggler syntax."
                             (plist-get info :taskjuggler-unique-ids))))
           ;; If no resource is allocated among tasks, allocate one to
           ;; the first task.
-          (unless (org-element-map main-tasks 'headline
-                    (lambda (task) (org-element-property :ALLOCATE task))
-                    info t)
-            (org-element-put-property
-             (car main-tasks) :ALLOCATE
-             (or (org-taskjuggler-get-id (car main-resources) info)
-                 (user-login-name))))
+          ;; (unless (org-element-map main-tasks 'headline
+          ;;           (lambda (task) (org-element-property :ALLOCATE task))
+          ;;           info t)
+          ;;   (org-element-put-property
+          ;;    (car main-tasks) :ALLOCATE
+          ;;    (or (org-taskjuggler-get-id (car main-resources) info)
+          ;;        (user-login-name))))
           (mapconcat
            (lambda (task) (org-taskjuggler--build-task task info))
            main-tasks ""))
