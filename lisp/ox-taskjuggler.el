@@ -230,7 +230,7 @@ marked with `org-taskjuggler-project-tag'"
 # A traditional Gantt chart with a project overview.
 taskreport plan \"\" {
   headline \"Project Plan\"
-  columns bsi, name, start, end, effort, chart
+  columns bsi, name, start, end, chart
   loadunit shortauto
   hideresource 1
 }
@@ -825,18 +825,19 @@ a unique id will be associated to it."
             (org-element-property :COMPLETE task)))
          (depends (org-taskjuggler-resolve-dependencies task info))
          (effort (let ((property
-			(intern (concat ":" (upcase org-effort-property)))))
-		   (org-element-property property task)))
+                        (intern (concat ":" (upcase org-effort-property)))))
+                   (org-element-property property task)))
+         (start (org-taskjuggler-get-start task))
+         (end (org-taskjuggler-get-end task))
          (milestone
           (or (org-element-property :MILESTONE task)
               (not (or (org-element-map (org-element-contents task) 'headline
-			 'identity info t)  ; Has task any child?
-		       effort
-		       (org-element-property :LENGTH task)
-		       (org-element-property :DURATION task)
-		       (and (org-taskjuggler-get-start task)
-			    (org-taskjuggler-get-end task))
-		       (org-element-property :PERIOD task)))))
+                         'identity info t)  ; Has task any child?
+                       effort
+                       (org-element-property :LENGTH task)
+                       (org-element-property :DURATION task)
+                       (and start end)
+                       (org-element-property :PERIOD task)))))
          (priority
           (let ((pri (org-element-property :priority task)))
             (and pri
@@ -848,6 +849,8 @@ a unique id will be associated to it."
              (org-taskjuggler-get-id task info)
              (org-taskjuggler-get-name task))
      ;; Add default attributes.
+     (and start (format "  start %s\n" start))
+     (and end (format "  end %s\n" end))
      (and depends
           (format "  depends %s\n"
                   (org-taskjuggler-format-dependencies depends task info)))
