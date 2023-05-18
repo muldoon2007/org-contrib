@@ -829,15 +829,16 @@ a unique id will be associated to it."
                    (org-element-property property task)))
          (start (org-taskjuggler-get-start task))
          (end (org-taskjuggler-get-end task))
-         (milestone
-          (or (org-element-property :MILESTONE task)
-              (not (or (org-element-map (org-element-contents task) 'headline
-                         'identity info t)  ; Has task any child?
-                       effort
-                       (org-element-property :LENGTH task)
-                       (org-element-property :DURATION task)
-                       (and start end)
-                       (org-element-property :PERIOD task)))))
+         (milestone (org-element-property :MILESTONE task)
+          ;; (or (org-element-property :MILESTONE task)
+          ;;     (not (or (org-element-map (org-element-contents task) 'headline
+          ;;                'identity info t)  ; Has task any child?
+          ;;              effort
+          ;;              (org-element-property :LENGTH task)
+          ;;              (org-element-property :DURATION task)
+          ;;              (and start end)
+          ;;              (org-element-property :PERIOD task))))
+          )
          (priority
           (let ((pri (org-element-property :priority task)))
             (and pri
